@@ -93,27 +93,6 @@ public class QuestionDAO {
             pstmt.setInt(1, questionId);
             
             try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    Question question = new Question();
-                    question.setQuestionId(rs.getInt("question_id"));
-                    question.setSubjectId(rs.getInt("subject_id"));
-                    question.setQuestionText(rs.getString("question_text"));
-                    question.setCorrectAnswer(rs.getString("correct_answer"));
-                    question.setCreatedBy(rs.getInt("created_by"));
-                    question.setCreatedDate(rs.getTimestamp("created_date"));
-                    
-                    // Get options for this question
-                    List<QuizOption> options = quizDAO.getOptionsByQuestionId(question.getQuestionId());
-                    question.setOptions(options);
-                    
-                    questions.add(question);
-                }
-            }
-        }
-        
-        return questions;
-    }
-}.executeQuery()) {
                 if (rs.next()) {
                     Question question = new Question();
                     question.setQuestionId(rs.getInt("question_id"));
@@ -315,4 +294,25 @@ public class QuestionDAO {
             pstmt.setInt(1, subjectId);
             pstmt.setInt(2, count);
             
-            try (ResultSet rs = pstmt
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Question question = new Question();
+                    question.setQuestionId(rs.getInt("question_id"));
+                    question.setSubjectId(rs.getInt("subject_id"));
+                    question.setQuestionText(rs.getString("question_text"));
+                    question.setCorrectAnswer(rs.getString("correct_answer"));
+                    question.setCreatedBy(rs.getInt("created_by"));
+                    question.setCreatedDate(rs.getTimestamp("created_date"));
+                    
+                    // Get options for this question
+                    List<QuizOption> options = quizDAO.getOptionsByQuestionId(question.getQuestionId());
+                    question.setOptions(options);
+                    
+                    questions.add(question);
+                }
+            }
+        }
+        
+        return questions;
+    }
+}
